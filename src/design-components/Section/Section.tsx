@@ -7,9 +7,7 @@ type SectionProps = {
   subTitle?: ReactNode;
   children?: ReactNode;
   leadingComponent?: ReactNode;
-  defaultOpen?: boolean;
-  onOpen?: () => void;
-  onClose?: () => void;
+  isOpen?: boolean;
   disabled?: boolean;
 };
 
@@ -18,32 +16,14 @@ export const Section = ({
   subTitle,
   children,
   leadingComponent,
-  defaultOpen = false,
-  onOpen,
-  onClose,
+  isOpen = false,
   disabled = false,
 }: SectionProps) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-
   const contentRef = useRef<HTMLDivElement>(null);
   const contentHeight = contentRef.current?.scrollHeight || 0;
 
-  const handleClick = () => {
-    if (disabled) {
-      return;
-    }
-
-    if (isOpen) {
-      setIsOpen(false);
-      onClose?.();
-      return;
-    }
-    setIsOpen(true);
-    onOpen?.();
-  };
-
   return (
-    <S.Container onClick={handleClick}>
+    <S.Container>
       {leadingComponent ? (
         <S.Leading $disabled={disabled}>{leadingComponent}</S.Leading>
       ) : null}

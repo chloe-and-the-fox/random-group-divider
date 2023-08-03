@@ -1,41 +1,38 @@
-import { NumberIcon } from "@components/NumberIcon";
+import { useStep } from "@providers";
+
 import { Page } from "@design-components/Page";
 import { Section } from "@design-components/Section";
+import { NumberIcon } from "@components/NumberIcon";
 
 import * as S from "./MainPage.style";
 
 export const MainPage = () => {
+  const { state } = useStep();
+
+  if (!state || !state.steps) {
+    return null;
+  }
   return (
     <Page
       title={"🧩 랜덤 그룹 메이커"}
       subTitle={"랜덤으로 그룹을 나눠드려요! 가중치를 줄 수도 있어요."}
     >
       <S.SectionList>
-        <Section
-          title={
-            <h3>
-              <mark>몇 명</mark>의 사람을 <mark>몇 그룹</mark>으로 나누시겠어요?
-            </h3>
-          }
-          leadingComponent={<NumberIcon number={1} />}
-          defaultOpen
-        ></Section>
-        <Section
-          title={
-            <h3>
-              나눌 사람들의 <mark>이름</mark>을 입력해주세요
-            </h3>
-          }
-          leadingComponent={<NumberIcon number={2} />}
-          defaultOpen={false}
-          disabled
-        ></Section>
-        <Section
-          title={<h3>분리하거나 붙일 조합을 입력해주세요 (선택)</h3>}
-          leadingComponent={<NumberIcon number={3} />}
-          defaultOpen={false}
-          disabled
-        ></Section>
+        {state.steps.map((step) => {
+          const { index, title, isOpen, disabled, content } = step;
+          return (
+            <li key={index}>
+              <Section
+                title={title}
+                leadingComponent={<NumberIcon number={index} />}
+                isOpen={isOpen}
+                disabled={disabled}
+              >
+                {content}
+              </Section>
+            </li>
+          );
+        })}
       </S.SectionList>
     </Page>
   );

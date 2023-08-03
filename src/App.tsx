@@ -1,11 +1,17 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import { StepProvider } from "@providers";
+
 import { MainPage } from "@pages";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainPage />,
+    element: (
+      <StepProvider>
+        <MainPage />,
+      </StepProvider>
+    ),
   },
 ]);
 

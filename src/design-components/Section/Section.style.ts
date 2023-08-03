@@ -23,7 +23,7 @@ export const Container = styled.section`
 export const Leading = styled.div<{
   $disabled: boolean;
 }>`
-  * {
+  > * {
     background-color: ${({ $disabled, theme }) =>
       $disabled ? theme.color.Gray200 : theme.color.Purple400};
   }

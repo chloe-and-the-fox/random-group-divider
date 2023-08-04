@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 const ANIMATION_DURATION = 0.3;
 
 export const Container = styled.section`
-  width: 100%;
+  max-width: 100%;
   padding: 20px 24px;
 
   border-radius: 12px;
@@ -18,12 +18,16 @@ export const Container = styled.section`
   * {
     transition: all ${ANIMATION_DURATION * 2}s ease-in-out;
   }
+
+  ${({ theme }) => theme.typography.Body1};
+  color: ${({ theme }) => theme.color.Black};
 `;
 
 export const Leading = styled.div<{
   $disabled: boolean;
 }>`
-  > * {
+  > *,
+  span {
     background-color: ${({ $disabled, theme }) =>
       $disabled ? theme.color.Gray200 : theme.color.Purple400};
   }

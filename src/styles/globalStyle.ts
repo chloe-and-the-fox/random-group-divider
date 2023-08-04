@@ -16,4 +16,11 @@ export const GlobalStyle = createGlobalStyle`
     height: 100vh;
     background-color: ${({ theme }) => theme.color.Gray050};
   }
+
+  * {
+    box-sizing: border-box;
+    word-break: keep-all;
+    outline-color: ${({ theme }) => theme.core.Primary};
+    accent-color: ${({ theme }) => theme.core.Primary};
+  }
 `;

@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import * as S from "./Section.style";
 
@@ -20,7 +20,15 @@ export const Section = ({
   disabled = false,
 }: SectionProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const contentHeight = contentRef.current?.scrollHeight || 0;
+  const [contentHeight, setContentHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (!contentRef || !contentRef.current) {
+      return;
+    }
+    setContentHeight(contentRef.current.scrollHeight);
+    // console.log(title, disabled);
+  }, []);
 
   return (
     <S.Container>

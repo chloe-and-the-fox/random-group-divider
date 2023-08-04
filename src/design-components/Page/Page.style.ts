@@ -4,7 +4,6 @@ export const Page = styled.main`
   width: 37.5rem; // 600px
 
   margin: 40px auto 60px;
-  background-color: aliceblue;
 `;
 
 export const Title = styled.h1`

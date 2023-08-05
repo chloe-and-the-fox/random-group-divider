@@ -13,3 +13,5 @@ export const ColorToken = {
   Purple500: "#7D16FF",
   Purple400: "#AD6CFF",
 } as const;
+
+export type ColorKeys = keyof typeof ColorToken;

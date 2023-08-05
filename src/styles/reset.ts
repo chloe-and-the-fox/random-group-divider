@@ -136,4 +136,8 @@ button {
   background: none;
   cursor: pointer;
 }
+
+mark {
+  background-color: transparent;
+}
 `;

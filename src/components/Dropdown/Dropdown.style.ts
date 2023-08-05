@@ -31,6 +31,7 @@ export const Panel = styled(Column)`
   margin-top: 4px;
   padding: 1rem;
   width: 100%;
+  height: fit-content;
 
   background-color: ${({ theme }) => theme.color.White};
   border: 1px solid ${({ theme }) => theme.color.Gray050};

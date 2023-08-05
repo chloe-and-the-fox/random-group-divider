@@ -9,23 +9,28 @@ import {
   useReducer,
 } from "react";
 
+export type StepTag = "config" | "register" | "option";
 export type Step = SectionType & {
-  index: number;
+  _t: StepTag;
 };
 
 export type State = {
+  currentStep: StepTag;
+  currentStepStatus: Step;
   steps: Step[];
 };
 
 export type Action =
   | {
       _t: "OPEN_STEP";
-      payload: Step["index"];
+      payload: {
+        _t: Step["_t"];
+      };
     }
   | {
       _t: "UPDATE_STEP";
       payload: {
-        index: Step["index"];
+        _t: Step["_t"];
         step: Partial<Step>;
       };
     };
@@ -33,20 +38,36 @@ export type Action =
 const reducer = (prevState: State, action: Action) => {
   switch (action._t) {
     case "OPEN_STEP":
+      const targetStep =
+        prevState.steps.find((step) => step._t === action.payload._t) ||
+        prevState.steps[0];
+      targetStep.isOpen = true;
+      targetStep.disabled = false;
+
       return {
         ...prevState,
+        currentStep: action.payload._t,
+        currentStepStatus: targetStep,
         steps: prevState.steps.map((step) => {
-          if (step.index === action.payload) {
-            return { ...step, isOpen: true };
+          if (step._t === action.payload._t) {
+            return targetStep;
           }
           return { ...step, isOpen: false };
         }),
       };
     case "UPDATE_STEP":
+      if (prevState.currentStep !== action.payload._t) {
+        console.log("only current steps can be updated");
+        return prevState;
+      }
       return {
         ...prevState,
+        currentStepStatus: {
+          ...prevState.currentStepStatus,
+          ...action.payload.step,
+        },
         steps: prevState.steps.map((step) => {
-          if (step.index === action.payload.index) {
+          if (step._t === action.payload._t) {
             return { ...step, ...action.payload.step };
           }
           return step;
@@ -56,11 +77,14 @@ const reducer = (prevState: State, action: Action) => {
 };
 
 const initialState: State = {
+  currentStep: "config",
+  currentStepStatus: ConfigStep,
+  // TODO: cannot reference this components before initialization --- these values are used in the components
   steps: [ConfigStep, RegisterStep, OptionStep],
 };
 
-const StepContext = createContext<State | null>(null);
-const StepSetterContext = createContext<Dispatch<Action> | null>(null);
+const StepContext = createContext<State>(initialState);
+const StepSetterContext = createContext<Dispatch<Action>>(() => {});
 
 export const StepProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

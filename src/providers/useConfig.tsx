@@ -72,8 +72,8 @@ const initialState: State = {
   lowerCombination: null,
 };
 
-const ConfigContext = createContext<State | null>(null);
-const ConfigSetterContext = createContext<Dispatch<Action> | null>(null);
+const ConfigContext = createContext<State>(initialState);
+const ConfigSetterContext = createContext<Dispatch<Action>>(() => {});
 
 export const ConfigProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

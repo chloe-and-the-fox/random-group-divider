@@ -1,4 +1,4 @@
-import { Step } from "@pages/Main/mainPage.type";
+import { Step } from "@providers";
 
 const OptionStepTitle = () => {
   return <h3>분리하거나 붙일 조합을 입력해주세요 (선택)</h3>;
@@ -9,7 +9,7 @@ const OptionStepContent = () => {
 };
 
 export const OptionStep: Step = {
-  index: 3,
+  _t: "option",
   title: <OptionStepTitle />,
   isOpen: false,
   disabled: true,

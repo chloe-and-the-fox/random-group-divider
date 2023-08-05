@@ -1,4 +1,4 @@
-import { Step } from "@pages/Main/mainPage.type";
+import { Step } from "@providers";
 
 const RegisterStepTitle = () => {
   return (
@@ -13,7 +13,7 @@ const RegisterStepContent = () => {
 };
 
 export const RegisterStep: Step = {
-  index: 2,
+  _t: "register",
   title: <RegisterStepTitle />,
   isOpen: false,
   disabled: true,

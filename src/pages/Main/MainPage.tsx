@@ -11,14 +11,10 @@ export const MainPage = () => {
   const { state, setStep } = useStep();
 
   useEffect(() => {
-    if (!setStep) {
-      return;
-    }
-
     setStep({
       _t: "UPDATE_STEP",
       payload: {
-        index: 1,
+        _t: "config",
         step: {
           isOpen: true,
         },
@@ -36,14 +32,13 @@ export const MainPage = () => {
       subTitle={"랜덤으로 그룹을 나눠드려요! 가중치를 줄 수도 있어요."}
     >
       <S.SectionList>
-        {state.steps.map((step) => {
-          const { index, title, isOpen, disabled, content, contentHeight } =
-            step;
+        {state.steps.map((step, idx) => {
+          const { _t, title, isOpen, disabled, content, contentHeight } = step;
           return (
-            <li key={index}>
+            <li key={`${_t}-step`}>
               <Section
                 title={title}
-                leadingComponent={<NumberIcon number={index} />}
+                leadingComponent={<NumberIcon number={idx + 1} />}
                 isOpen={isOpen}
                 disabled={disabled}
                 content={content}

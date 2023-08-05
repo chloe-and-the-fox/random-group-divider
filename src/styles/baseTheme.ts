@@ -36,10 +36,10 @@ export const theme: DefaultTheme = {
       lineHeight: LineHeightToken.S,
       fontWeight: FontWeightToken.Normal,
     },
-    // Button: {
-    //   fontSize: FontSizeToken.M,
-    //   lineHeight: LineHeightToken.M,
-    //   fontWeight: FontWeightToken.Bold,
-    // },
+    Button: {
+      fontSize: FontSizeToken.M,
+      lineHeight: LineHeightToken.M,
+      fontWeight: FontWeightToken.Bold,
+    },
   },
 };

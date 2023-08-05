@@ -7,6 +7,7 @@ import { Dropdown, DropdownOption } from "@components/Dropdown";
 
 import { Column, Row } from "@design-components/Layout";
 import * as S from "./ConfigStep.style";
+import { getAverageMemberCount } from "@pages/Main/utils";
 
 const ConfigStepTitle = () => {
   return (
@@ -23,6 +24,12 @@ const ConfigStepContent = () => {
   const [memberCount, setMemberCount] = useState<number>(0);
   const [groupCount, setGroupCount] = useState<number>(0);
   const [customGroupCount, setCustomGroupCount] = useState<number>(0);
+
+  const avgMemberCount = getAverageMemberCount({
+    teamCount: groupCount === -1 ? customGroupCount : groupCount,
+    totalMemberCount: memberCount,
+  });
+  const avgMemberCountText = avgMemberCount.join(", ");
 
   const optionsList: DropdownOption[] = DEFAULT_OPTIONS.filter((_, idx) => {
     return memberCount - 1 > idx;
@@ -111,7 +118,9 @@ const ConfigStepContent = () => {
         개 그룹으로 나눌게요.
       </Row>
       {memberCount > 0 && (groupCount > 0 || customGroupCount > 0) ? (
-        <S.HelperText>🙋‍♀️ 한 팀당 13명씩 배치될 거예요</S.HelperText>
+        <S.HelperText>
+          🙋‍♀️ 한 팀당 {avgMemberCountText}명씩 배치될 거예요
+        </S.HelperText>
       ) : null}
     </Column>
   );

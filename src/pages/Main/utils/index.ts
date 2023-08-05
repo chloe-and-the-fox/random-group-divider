@@ -1,0 +1,1 @@
+export { getAverageMemberCount } from "./getAverageMemberCount";

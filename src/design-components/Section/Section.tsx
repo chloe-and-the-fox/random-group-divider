@@ -1,35 +1,16 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Section as SectionProps } from "./section.type";
 
 import * as S from "./Section.style";
-
-type SectionProps = {
-  title: ReactNode;
-  subTitle?: ReactNode;
-  children?: ReactNode;
-  leadingComponent?: ReactNode;
-  isOpen?: boolean;
-  disabled?: boolean;
-};
 
 export const Section = ({
   title,
   subTitle,
-  children,
+  content,
+  contentHeight = 0,
   leadingComponent,
   isOpen = false,
   disabled = false,
 }: SectionProps) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<number>(0);
-
-  useEffect(() => {
-    if (!contentRef || !contentRef.current) {
-      return;
-    }
-    setContentHeight(contentRef.current.scrollHeight);
-    // console.log(title, disabled);
-  }, []);
-
   return (
     <S.Container>
       {leadingComponent ? (
@@ -39,12 +20,11 @@ export const Section = ({
         <S.Title $disabled={disabled}>{title}</S.Title>
         <S.SubTitle>{subTitle}</S.SubTitle>
         <S.Content
-          ref={contentRef}
           aria-hidden={!isOpen}
           $isOpen={isOpen}
           $height={contentHeight}
         >
-          {children}
+          {content}
         </S.Content>
       </S.Wrapper>
     </S.Container>

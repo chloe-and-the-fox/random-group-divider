@@ -1,3 +1,4 @@
+import { SectionType } from "@design-components/Section";
 import { ConfigStep, OptionStep, RegisterStep } from "@pages/Main/components";
 import {
   Dispatch,
@@ -8,33 +9,48 @@ import {
   useReducer,
 } from "react";
 
-export type Step = {
+export type Step = SectionType & {
   index: number;
-  title: ReactNode;
-  isOpen: boolean;
-  disabled: boolean;
-  content: ReactNode;
 };
 
 export type State = {
   steps: Step[];
 };
 
-export type Action = {
-  _t: "STEP_OPEN";
-  payload: Step["index"];
-};
+export type Action =
+  | {
+      _t: "OPEN_STEP";
+      payload: Step["index"];
+    }
+  | {
+      _t: "UPDATE_STEP";
+      payload: {
+        index: Step["index"];
+        step: Partial<Step>;
+      };
+    };
 
 const reducer = (prevState: State, action: Action) => {
   switch (action._t) {
-    case "STEP_OPEN":
+    case "OPEN_STEP":
       return {
         ...prevState,
-        steps: prevState.steps.map((step) =>
-          step.index === action.payload
-            ? { ...step, isOpen: true }
-            : { ...step, isOpen: false }
-        ),
+        steps: prevState.steps.map((step) => {
+          if (step.index === action.payload) {
+            return { ...step, isOpen: true };
+          }
+          return { ...step, isOpen: false };
+        }),
+      };
+    case "UPDATE_STEP":
+      return {
+        ...prevState,
+        steps: prevState.steps.map((step) => {
+          if (step.index === action.payload.index) {
+            return { ...step, ...action.payload.step };
+          }
+          return step;
+        }),
       };
   }
 };

@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Step } from "@providers/useStep";
+import { Step, useStep } from "@providers/useStep";
 
 import { Input } from "@components/Input";
 import { Dropdown, DropdownOption } from "@components/Dropdown";
 
 import { Column, Row } from "@design-components/Layout";
+import * as S from "./ConfigStep.style";
 
 const ConfigStepTitle = () => {
   return (
@@ -16,13 +17,16 @@ const ConfigStepTitle = () => {
 };
 
 const ConfigStepContent = () => {
+  const { setStep } = useStep();
+  const ref = useRef<HTMLDivElement>(null);
+
   const [memberCount, setMemberCount] = useState<number>(0);
+  const [groupCount, setGroupCount] = useState<number>(0);
+  const [customGroupCount, setCustomGroupCount] = useState<number>(0);
+
   const optionsList: DropdownOption[] = DEFAULT_OPTIONS.filter((_, idx) => {
     return memberCount - 1 > idx;
   });
-
-  const [groupCount, setGroupCount] = useState<number>(0);
-  const [customGroupCount, setCustomGroupCount] = useState<number>(0);
 
   const handleMemberCountChange = (input: string) => {
     const value = Number(input);
@@ -30,6 +34,10 @@ const ConfigStepContent = () => {
       return;
     }
     setMemberCount(value);
+
+    if (value < groupCount) {
+      setGroupCount(0);
+    }
   };
 
   const handleGroupCountChange = (input: string | number) => {
@@ -48,8 +56,30 @@ const ConfigStepContent = () => {
     setCustomGroupCount(value);
   };
 
+  useEffect(() => {
+    if (!ref || !ref.current) {
+      return;
+    }
+
+    const contentHeight = ref.current.scrollHeight;
+
+    if (!setStep) {
+      return;
+    }
+
+    setStep({
+      _t: "UPDATE_STEP",
+      payload: {
+        index: 1,
+        step: {
+          contentHeight,
+        },
+      },
+    });
+  }, [memberCount, groupCount, customGroupCount]);
+
   return (
-    <Column $alignItems="flex-start" $gap="8px">
+    <Column ref={ref} $alignItems="flex-start" $gap="8px">
       <Row $justifyContent="flex-start" $alignItems="center" $gap="10px">
         <Input
           type={"number"}
@@ -80,6 +110,9 @@ const ConfigStepContent = () => {
         ) : null}
         개 그룹으로 나눌게요.
       </Row>
+      {memberCount > 0 && (groupCount > 0 || customGroupCount > 0) ? (
+        <S.HelperText>🙋‍♀️ 한 팀당 13명씩 배치될 거예요</S.HelperText>
+      ) : null}
     </Column>
   );
 };
@@ -87,9 +120,10 @@ const ConfigStepContent = () => {
 export const ConfigStep: Step = {
   index: 1,
   title: <ConfigStepTitle />,
-  isOpen: true,
+  isOpen: false,
   disabled: false,
   content: <ConfigStepContent />,
+  contentHeight: 0,
 };
 
 const DEFAULT_OPTIONS: DropdownOption[] = [

@@ -27,6 +27,10 @@ export const Dropdown = ({
   const label = options.find((option) => option.value === value)?.label;
 
   const handleSelectClick = () => {
+    if (disabled) {
+      return;
+    }
+
     setIsOpen((prev) => !prev);
   };
 

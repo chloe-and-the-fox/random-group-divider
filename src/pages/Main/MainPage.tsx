@@ -5,13 +5,31 @@ import { Section } from "@design-components/Section";
 import { NumberIcon } from "@components/NumberIcon";
 
 import * as S from "./MainPage.style";
+import { useEffect } from "react";
 
 export const MainPage = () => {
-  const { state } = useStep();
+  const { state, setStep } = useStep();
+
+  useEffect(() => {
+    if (!setStep) {
+      return;
+    }
+
+    setStep({
+      _t: "UPDATE_STEP",
+      payload: {
+        index: 1,
+        step: {
+          isOpen: true,
+        },
+      },
+    });
+  }, []);
 
   if (!state || !state.steps) {
     return null;
   }
+
   return (
     <Page
       title={"랜덤 그룹 메이커"}
@@ -19,7 +37,8 @@ export const MainPage = () => {
     >
       <S.SectionList>
         {state.steps.map((step) => {
-          const { index, title, isOpen, disabled, content } = step;
+          const { index, title, isOpen, disabled, content, contentHeight } =
+            step;
           return (
             <li key={index}>
               <Section
@@ -27,9 +46,9 @@ export const MainPage = () => {
                 leadingComponent={<NumberIcon number={index} />}
                 isOpen={isOpen}
                 disabled={disabled}
-              >
-                {content}
-              </Section>
+                content={content}
+                contentHeight={contentHeight}
+              />
             </li>
           );
         })}
